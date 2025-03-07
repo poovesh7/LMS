@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const Login = ({ setUser }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate(); // Initialize navigation
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,31 +16,30 @@ const Login = ({ setUser }) => {
     setErrorMessage("");
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/api/login/",
-        formData
-      );
+      const res = await axios.post("http://127.0.0.1:8000/api/login/", formData);
       localStorage.setItem("token", res.data.access);
       setUser(res.data.user);
-      alert(`Logged in as ${res.data.user.role}`);
-      window.location.href = "/dashboard";
+      
+      const userRole = res.data.user.role; // Extract user role
+
+      // Redirect based on role
+      if (userRole === "admin") {
+        navigate("/admin"); 
+      } else if (userRole === "instructor") {
+        navigate("/instructor");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
-      setErrorMessage(
-        error.response?.data?.detail || "Login failed. Please try again."
-      );
+      setErrorMessage(error.response?.data?.detail || "Login failed. Please try again.");
     }
   };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div
-        className="card p-4 shadow-lg"
-        style={{ maxWidth: "400px", width: "100%" }}
-      >
+      <div className="card p-4 shadow-lg" style={{ maxWidth: "400px", width: "100%" }}>
         <h2 className="text-center text-success">Login</h2>
-        {errorMessage && (
-          <p className="text-danger text-center">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Username</label>
@@ -69,7 +70,7 @@ const Login = ({ setUser }) => {
           </button>
         </form>
         <div>
-            <br></br>
+          <br />
           <p className="ms-5">
             Don't have an account?{" "}
             <a href="/register" className="text-primary">
