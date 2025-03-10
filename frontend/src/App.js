@@ -7,6 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
 import InstructorDashboard from "./instructor/InstructorDashboard";
 import Course from "./instructor/Course";  // Ensure this import is correct
+import Topic from "./instructor/Topic";
+import Quiz from "./instructor/Quiz";
+
+
 
 const App = () => {
     const [user, setUser] = useState(null);
@@ -35,7 +39,9 @@ const App = () => {
                     
                     {/* Restrict access to protected routes */}
                     <Route path="/instructor" element={user ? <InstructorDashboard /> : <Navigate to="/login" />} />
-                    <Route path="/course" element={user ? <Course /> : <Navigate to="/login" />} />
+                    <Route path="/course" element={<Course />} />
+                    <Route path="/topic" element={<Topic />} />
+                    <Route path="/quiz" element={<Quiz />} />
                 </Routes>
             </div>
         </Router>

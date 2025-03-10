@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'learn',  
     'course',
+    'embed_video',
 ]
 
 MIDDLEWARE = [
@@ -134,7 +135,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+   
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 AUTH_USER_MODEL = "learn.User"
 

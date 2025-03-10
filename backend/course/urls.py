@@ -1,11 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import CourseViewSet
+from .views import *
 
 # Using DRF's DefaultRouter to generate routes automatically
 router = DefaultRouter()
 router.register(r'courses', CourseViewSet, basename='course')
+router.register(r'topics', TopicViewSet)
+router.register(r'quizzes', QuizViewSet, basename='quiz')
 
 urlpatterns = [
-    path('api/', include(router.urls)),  # Include the generated API routes
+    path('', include(router.urls)),  # Removed 'api/' to avoid duplication
 ]

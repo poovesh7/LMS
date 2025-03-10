@@ -8,21 +8,25 @@ const Course = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [editingCourse, setEditingCourse] = useState(null);
 
-  // Fetch courses
+  // Fetch courses function
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/courses/");
+      setCourses(response.data);
+    } catch (error) {
+      console.log("Error fetching courses:", error);
+    }
+  };
+
+  // Fetch courses on mount
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/courses/")
-      .then(response => setCourses(response.data))
-      .catch(error => console.log(error));
+    fetchCourses();
   }, []);
 
   // Add or Update Course
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const courseData = {
-      title,
-      price,
-      thumbnail_url: thumbnailUrl,  // Change to URL field
-    };
+    const courseData = { title, price, thumbnail_url: thumbnailUrl };
 
     try {
       if (editingCourse) {
@@ -31,9 +35,12 @@ const Course = () => {
       } else {
         await axios.post("http://127.0.0.1:8000/api/courses/", courseData);
       }
-      window.location.reload();
+      fetchCourses(); // Refresh list after add/update
+      setTitle("");
+      setPrice("");
+      setThumbnailUrl("");
     } catch (error) {
-      console.log(error);
+      console.log("Error saving course:", error);
     }
   };
 
@@ -43,7 +50,7 @@ const Course = () => {
       await axios.delete(`http://127.0.0.1:8000/api/courses/${id}/`);
       setCourses(courses.filter(course => course.id !== id));
     } catch (error) {
-      console.log(error);
+      console.log("Error deleting course:", error);
     }
   };
 
@@ -85,7 +92,17 @@ const Course = () => {
                 {course.thumbnail_url ? <img src={course.thumbnail_url} alt={course.title} width="100" /> : "No Image"}
               </td>
               <td>
-                <button className="btn btn-warning btn-sm me-2" onClick={() => { setEditingCourse(course); setTitle(course.title); setPrice(course.price); setThumbnailUrl(course.thumbnail_url); }}>Edit</button>
+                <button 
+                  className="btn btn-warning btn-sm me-2" 
+                  onClick={() => {
+                    setEditingCourse(course);
+                    setTitle(course.title);
+                    setPrice(course.price);
+                    setThumbnailUrl(course.thumbnail_url);
+                  }}
+                >
+                  Edit
+                </button>
                 <button className="btn btn-danger btn-sm" onClick={() => handleDelete(course.id)}>Delete</button>
               </td>
             </tr>

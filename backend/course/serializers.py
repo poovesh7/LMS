@@ -1,9 +1,19 @@
 from rest_framework import serializers
-from .models import Course
+from .models import *
 
 class CourseSerializer(serializers.ModelSerializer):
-    instructor_username = serializers.CharField(source='instructor.username', read_only=True)  # Display instructor name
+      # Display instructor name
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'price', 'thumbnail_url', 'instructor', 'instructor_username']
+        fields = ['id', 'title', 'price', 'thumbnail_url', ]
+
+class TopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = '__all__'
+
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = '__all__'

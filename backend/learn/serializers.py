@@ -1,5 +1,6 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
-from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
@@ -20,7 +21,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             email=validated_data["email"],
             password=validated_data["password"],
-            role=validated_data.get("role", "student"),  # Default role
+            role=validated_data.get("role", "student"),
         )
         return user
 
@@ -29,9 +30,16 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(username=data["username"], password=data["password"])
-        if not user:
-            raise serializers.ValidationError("Invalid credentials")
+        username = data["username"]
+        password = data["password"]
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User not found")
+
+        if not check_password(password, user.password):  # Use check_password instead of authenticate()
+            raise serializers.ValidationError("Incorrect password")
 
         refresh = RefreshToken.for_user(user)
 
