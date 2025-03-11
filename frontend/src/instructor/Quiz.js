@@ -16,7 +16,7 @@ const Quiz = () => {
         option_b: "",
         option_c: "",
         option_d: "",
-        correct_option: "A", // Default to A
+        correct_option: "", // Default to A
     });
     const [editId, setEditId] = useState(null);
 
@@ -67,7 +67,7 @@ const Quiz = () => {
                 option_b: "",
                 option_c: "",
                 option_d: "",
-                correct_option: "A",
+                correct_option: "",
             });
             setEditId(null);
             setFilteredTopics([]);

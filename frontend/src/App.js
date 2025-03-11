@@ -9,6 +9,8 @@ import InstructorDashboard from "./instructor/InstructorDashboard";
 import Course from "./instructor/Course";  // Ensure this import is correct
 import Topic from "./instructor/Topic";
 import Quiz from "./instructor/Quiz";
+import Courses from "./student/Courses";
+import CourseDetail from "./student/CourseDetail";
 
 
 
@@ -42,6 +44,8 @@ const App = () => {
                     <Route path="/course" element={<Course />} />
                     <Route path="/topic" element={<Topic />} />
                     <Route path="/quiz" element={<Quiz />} />
+                    <Route path="/courses" element={<Courses />} />
+                    <Route path="/course/:id" element={<CourseDetail />} />
                 </Routes>
             </div>
         </Router>

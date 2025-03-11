@@ -28,7 +28,7 @@ const Login = ({ setUser }) => {
       } else if (userRole === "instructor") {
         navigate("/instructor");
       } else {
-        navigate("/dashboard");
+        navigate("/courses");
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.detail || "Login failed. Please try again.");

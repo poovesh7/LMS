@@ -5,7 +5,7 @@ from .views import *
 # Using DRF's DefaultRouter to generate routes automatically
 router = DefaultRouter()
 router.register(r'courses', CourseViewSet, basename='course')
-router.register(r'topics', TopicViewSet)
+router.register(r'topics', TopicViewSet,basename='topic')
 router.register(r'quizzes', QuizViewSet, basename='quiz')
 
 urlpatterns = [
