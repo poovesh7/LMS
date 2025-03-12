@@ -7,6 +7,7 @@ function CourseDetail() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [topics, setTopics] = useState([]);
+  const [currentTopic, setCurrentTopic] = useState(null);
 
   useEffect(() => {
     axios
@@ -16,79 +17,101 @@ function CourseDetail() {
 
     axios
       .get(`http://127.0.0.1:8000/api/topics/`)
-      .then((response) => setTopics(response.data))
+      .then((response) => {
+        const courseTopics = response.data.filter(
+          (topic) => topic.course === parseInt(id)
+        );
+        setTopics(courseTopics);
+        if (courseTopics.length > 0) {
+          setCurrentTopic(courseTopics[0]);
+          setTopics(courseTopics.slice(1));
+        }
+      })
       .catch((error) => console.error("Error fetching topics:", error));
   }, [id]);
 
-  // Helper function to extract YouTube video ID from URL
   const extractYouTubeID = (url) => {
-    const match = url.match(
-      /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/embed\/|.*\/v\/|.*\/watch\?v=|.*\/shorts\/|.*&v=))([^?&"'>]+)/
+    const match = url?.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/embed\/|.*\/v\/|.*\/watch\?v=|.*\/shorts\/|.*&v=))([^?&"'>]+)/i
     );
     return match ? match[1] : null;
   };
 
-  if (!course) return <h2>Loading...</h2>;
+  if (!course || !currentTopic) return <h2>Loading...</h2>;
 
-  // Filter topics belonging to this course
-  const courseTopics = topics.filter((topic) => topic.course === parseInt(id));
+  const handleTopicClick = (selectedTopic) => {
+    setTopics((prevTopics) => {
+      const updatedTopics = prevTopics.filter((topic) => topic.id !== selectedTopic.id);
+      return [...updatedTopics, currentTopic];
+    });
+    setCurrentTopic(selectedTopic);
+  };
 
   return (
     <Container className="my-2">
       <h2 className="text-center mb-4">{course.title}</h2>
-
       <Row>
-        {/* Left Side: Main Video */}
         <Col md={8}>
-          {courseTopics.length > 0 && (
-            <Card className="mb-3" border="0">
-              <Card.Body>
-                <Card.Title>{courseTopics[0].title}</Card.Title>
-                {extractYouTubeID(courseTopics[0].video) ? (
-                  <iframe
-                    width="100%"
-                    height="400"
-                    src={`https://www.youtube.com/embed/${extractYouTubeID(
-                      courseTopics[0].video
-                    )}`}
-                    title={courseTopics[0].title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                ) : (
-                  <p>Invalid YouTube URL</p>
-                )}
-                <Card.Text>{course.description}</Card.Text>
-              </Card.Body>
-            </Card>
-          )}
+          <Card className="mb-3" border="0">
+            <div style={{ position: "relative", width: "100%", height: "400px" }}>
+              {extractYouTubeID(currentTopic.video) && (
+                <iframe
+                  width="100%"
+                  height="400"
+                  src={`https://www.youtube.com/embed/${extractYouTubeID(currentTopic.video)}?autoplay=1`}
+                  title={currentTopic.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ borderRadius: "12px", overflow: "hidden" }}
+                ></iframe>
+              )}
+            </div>
+            <Card.Body>
+              <Card.Title>{currentTopic.title}</Card.Title>
+              <h4>Description:</h4>
+              <Card.Text>{currentTopic.description}</Card.Text>
+            </Card.Body>
+          </Card>
         </Col>
-
-        {/* Right Side: List of Other Topics */}
-        <Col md={4}>
+        <Col md={4} >
           <h4>Other Topics</h4>
           <ListGroup>
-            {courseTopics.slice(1).map((topic) => (
-              <ListGroup.Item key={topic.id} className="p-0 border-0">
-                <Card border="0">
-                  <Card.Body>
+            {topics.map((topic) => (
+              <ListGroup.Item
+                key={topic.id}
+                className="p-0 border-0"
+                action
+                onClick={() => handleTopicClick(topic)}
+              >
+                <Card border="0" className="shadow-sm rounded-3 ">
+                  <Card.Body >
                     <Card.Title>{topic.title}</Card.Title>
-                    {extractYouTubeID(topic.video) ? (
-                      <iframe
-                        width="100%"
-                        height="200"
-                        src={`https://www.youtube.com/embed/${extractYouTubeID(
-                          topic.video
-                        )}`}
-                        title={topic.title}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
-                    ) : (
-                      <p>Invalid YouTube URL</p>
-                    )}
+                    <div style={{ position: "relative", width: "100%", height: "200px" }}>
+                      <img
+                        className="shadow-sm rounded-3"
+                        src={course.thumbnail_url || "default-thumbnail.jpg"}
+                        alt={course.title}
+                        style={{ width: "100%", height: "200px", objectFit: "cover", cursor: "pointer" }}
+                        onClick={(e) => {
+                          e.target.style.display = "none";
+                          document.getElementById(`video-frame-${topic.id}`).style.display = "block";
+                        }}
+                      />
+                      {extractYouTubeID(topic.video) && (
+                        <iframe
+                          id={`video-frame-${topic.id}`}
+                          width="100%"
+                          height="200"
+                          src={`https://www.youtube.com/embed/${extractYouTubeID(topic.video)}`}
+                          title={topic.title}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          style={{ borderRadius: "12px", overflow: "hidden", display: "none" }}
+                        ></iframe>
+                      )}
+                    </div>
                   </Card.Body>
                 </Card>
               </ListGroup.Item>
@@ -96,14 +119,12 @@ function CourseDetail() {
           </ListGroup>
         </Col>
       </Row>
-
-      {/* Buttons */}
       <div className="d-flex justify-content-center gap-3 mt-4">
+        <Button href={`/studentquiz/${id}`} variant="success">
+          Take Quiz
+        </Button>
         <Button href={`/progress/${id}`} variant="primary">
           Track Progress
-        </Button>
-        <Button href={`/quiz/${id}`} variant="success">
-          Take Quiz
         </Button>
       </div>
     </Container>

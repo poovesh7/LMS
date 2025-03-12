@@ -2,10 +2,10 @@ import React from "react";
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#7303c0" }}>
       <div className="container-fluid">
         {/* LMS Title */}
-        <a className="navbar-brand" href="/">LMS</a>
+        <a className="navbar-brand text-white" href="/">LMS</a>
 
         {/* Navbar Toggle Button for Mobile */}
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,13 +16,13 @@ const Header = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <a className="nav-link" href="/">Home</a>
+              <a className="nav-link text-white" href="/">Home</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/courses">Courses</a>
+              <a className="nav-link text-white" href="/courses">Courses</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/about">About Us</a>
+              <a className="nav-link text-white" href="/about">About Us</a>
             </li>
           </ul>
 
