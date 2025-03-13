@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
+
+import Courses from "./student/Courses";
+import CourseDetail from "./student/CourseDetail";
+import StudentQuiz from "./student/StudentQuiz";
+import About from "./student/About";
+
+
 import InstructorDashboard from "./instructor/InstructorDashboard";
 import Course from "./instructor/Course";
 import Topic from "./instructor/Topic";
 import Quiz from "./instructor/Quiz";
-import Courses from "./student/Courses";
-import CourseDetail from "./student/CourseDetail";
-import StudentQuiz from "./student/StudentQuiz";
+import AdminDashboard from "./instructor/AdminDashboard";
+import Signup from "./instructor/Signup";
 
 const AppContent = ({ user, setUser }) => {
     const location = useLocation(); 
@@ -33,6 +39,9 @@ const AppContent = ({ user, setUser }) => {
                     <Route path="/course/:id" element={<CourseDetail />} />
                     <Route path="/studentquiz" element={<StudentQuiz />} />
                     <Route path="/studentquiz/:id" element={<StudentQuiz />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/about" element={<About/>} />
+                    <Route path="/account" element={<Signup/>} />
                 </Routes>
             </div>
         </>
