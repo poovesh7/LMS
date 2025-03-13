@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 import axios from "axios";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
@@ -10,7 +12,6 @@ import Courses from "./student/Courses";
 import CourseDetail from "./student/CourseDetail";
 import StudentQuiz from "./student/StudentQuiz";
 import About from "./student/About";
-
 
 import InstructorDashboard from "./instructor/InstructorDashboard";
 import Course from "./instructor/Course";

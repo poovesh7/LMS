@@ -93,7 +93,7 @@ const Course = () => {
               </td>
               <td>
                 <button 
-                  className="btn btn-warning btn-sm me-2" 
+                  className="btn btn-success btn-sm me-2 rounded-circle" 
                   onClick={() => {
                     setEditingCourse(course);
                     setTitle(course.title);
@@ -101,9 +101,9 @@ const Course = () => {
                     setThumbnailUrl(course.thumbnail_url);
                   }}
                 >
-                  Edit
+                   <i className="bi bi-pencil"></i>
                 </button>
-                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(course.id)}>Delete</button>
+                <button className="btn btn-danger btn-sm rounded-circle" onClick={() => handleDelete(course.id)}><i className="bi bi-trash3"></i></button>
               </td>
             </tr>
           ))}

@@ -163,7 +163,7 @@ const Topic = () => {
               </td>
               <td>
                 <button 
-                  className="btn btn-warning btn-sm me-2" 
+                  className="btn btn-success btn-sm me-2 rounded-circle" 
                   onClick={() => {
                     setEditingTopic(topic);
                     setCourseId(topic.course);
@@ -172,9 +172,9 @@ const Topic = () => {
                     setVideo(topic.video);
                   }}
                 >
-                  Edit
+                  <i className="bi bi-pencil"></i>
                 </button>
-                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(topic.id)}>Delete</button>
+                <button className="btn btn-danger btn-sm rounded-circle" onClick={() => handleDelete(topic.id)}>                    <i className="bi bi-trash3"></i></button>
               </td>
             </tr>
           ))}

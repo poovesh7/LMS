@@ -16,7 +16,7 @@ const Quiz = () => {
         option_b: "",
         option_c: "",
         option_d: "",
-        correct_option: "", // Default to A
+        correct_option: "",
     });
     const [editId, setEditId] = useState(null);
 
@@ -139,8 +139,12 @@ const Quiz = () => {
                             </td>
                             <td style={{ backgroundColor: "#2ec958" }}>{quiz.correct_option}</td>
                             <td>
-                                <Button variant="warning" size="sm" onClick={() => handleShow(quiz)}>Edit</Button>
-                                <Button variant="danger" size="sm" onClick={() => handleDelete(quiz.id)} className="ms-2">Delete</Button>
+                                <Button variant="warning" className="rounded-circle"size="sm" onClick={() => handleShow(quiz)}>
+                                    <i className="bi bi-pencil"></i> 
+                                </Button>
+                                <Button variant="danger" size="sm" onClick={() => handleDelete(quiz.id)} className="ms-2 rounded-circle">
+                                    <i className="bi bi-trash3"></i>
+                                </Button>
                             </td>
                         </tr>
                     ))}
