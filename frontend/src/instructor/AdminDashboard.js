@@ -7,18 +7,16 @@ const AdminDashboard = () => {
     const [instructors, setInstructors] = useState(0);
     const [students, setStudents] = useState(0);
     const [users, setUsers] = useState([]);
-    const [progressData, setProgressData] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchCounts();
         fetchUsers();
-        fetchProgress();
     }, []);
 
     const fetchCounts = async () => {
         try {
-            const response = await axios.get('/api/admin/user-counts/');
+            const response = await axios.get('http://127.0.0.1:8000/api/admin/user-counts/');
             setInstructors(response.data.instructors);
             setStudents(response.data.students);
         } catch (error) {
@@ -28,19 +26,10 @@ const AdminDashboard = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('/api/admin/users/');
+            const response = await axios.get('http://127.0.0.1:8000/api/admin/users/');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
-        }
-    };
-
-    const fetchProgress = async () => {
-        try {
-            const response = await axios.get('/api/admin/progress/');
-            setProgressData(response.data);
-        } catch (error) {
-            console.error('Error fetching progress data:', error);
         }
     };
 
@@ -48,22 +37,37 @@ const AdminDashboard = () => {
         navigate('/account');
     };
 
+    const handleUpdate = (user) => {
+        navigate(`/update-user/${user.id}`, { state: { user } });
+    };
+
+    const handleDelete = async (userId) => {
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            try {
+                await axios.delete(`http://127.0.0.1:8000/api/admin/users/${userId}/delete/`); // Updated path
+                setUsers(users.filter(user => user.id !== userId));  // Remove from UI
+            } catch (error) {
+                console.error('Error deleting user:', error);
+            }
+        }
+    };
+
     return (
         <Container className="mt-4">
             <Row>
-                <Col md={4}>
+                <Col md={6}>
                     <Card className="text-center">
                         <Card.Body>
                             <Card.Title>Total Instructors</Card.Title>
-                            <h3>{instructors}</h3>
+                            <h3 className="text-primary">{instructors}</h3>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={4}>
+                <Col md={6}>
                     <Card className="text-center">
                         <Card.Body>
                             <Card.Title>Total Students</Card.Title>
-                            <h3>{students}</h3>
+                            <h3 className="text-primary">{students}</h3>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -77,34 +81,20 @@ const AdminDashboard = () => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map(user => (
                         <tr key={user.id}>
                             <td>{user.id}</td>
-                            <td>{user.name}</td>
+                            <td>{user.username}</td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <h4 className="mt-4">Student Progress</h4>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Course</th>
-                        <th>Progress (%)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {progressData.map(progress => (
-                        <tr key={progress.id}>
-                            <td>{progress.student_name}</td>
-                            <td>{progress.course}</td>
-                            <td>{progress.progress}%</td>
+                            <td>
+                                <Button variant="warning" size="sm" className="me-2" onClick={() => handleUpdate(user)}>Edit</Button>
+                                <Button variant="danger" size="sm" onClick={() => handleDelete(user.id)}>Delete</Button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

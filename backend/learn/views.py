@@ -33,3 +33,24 @@ class LoginView(APIView):
             "access": user_data["access"],
             "user": user_data["user"],
         })
+
+class UserCountsView(APIView):
+    def get(self, request):
+        instructors = User.objects.filter(role='instructor').count()
+        students = User.objects.filter(role='student').count()
+        return Response({"instructors": instructors, "students": students})
+
+class UserListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.all()
+    
+
+class UserUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserDeleteView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

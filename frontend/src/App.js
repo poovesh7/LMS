@@ -18,6 +18,8 @@ import Topic from "./instructor/Topic";
 import Quiz from "./instructor/Quiz";
 import AdminDashboard from "./instructor/AdminDashboard";
 import Signup from "./instructor/Signup";
+import UpdateUser from "./instructor/UpdateUser";
+
 
 const AppContent = ({ user, setUser }) => {
     const location = useLocation(); 
@@ -42,6 +44,7 @@ const AppContent = ({ user, setUser }) => {
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/about" element={<About/>} />
                     <Route path="/account" element={<Signup/>} />
+                    <Route path="/update-user/:id" element={<UpdateUser />} />
                 </Routes>
             </div>
         </>
