@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Container, Card, ListGroup, Button, Row, Col } from "react-bootstrap";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 function CourseDetail() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [topics, setTopics] = useState([]);
   const [currentTopic, setCurrentTopic] = useState(null);
+  const [completedItems, setCompletedItems] = useState(0);
 
   useEffect(() => {
     axios
@@ -45,6 +48,11 @@ function CourseDetail() {
       return [...updatedTopics, currentTopic];
     });
     setCurrentTopic(selectedTopic);
+    setCompletedItems((prev) => prev + 1);
+  };
+
+  const calculateCompletionPercentage = () => {
+    return (completedItems / (topics.length + completedItems)) * 100;
   };
 
   return (
@@ -72,9 +80,24 @@ function CourseDetail() {
               <h4>Description:</h4>
               <Card.Text>{currentTopic.description}</Card.Text>
             </Card.Body>
+            <div className="mt-4 d-flex flex-column align-items-center">
+        <h5>Completion Progress</h5>
+        <div style={{ width: 100, height: 100 }}>
+          <CircularProgressbar
+            value={calculateCompletionPercentage()}
+            text={`${calculateCompletionPercentage().toFixed(2)}%`}
+            styles={buildStyles({
+              textSize: "16px",
+              pathColor: "#28a745",
+              textColor: "#000",
+              trailColor: "#d6d6d6",
+            })}
+          />
+        </div>
+      </div>
           </Card>
         </Col>
-        <Col md={4} >
+        <Col md={4}>
           <h4>Other Topics</h4>
           <ListGroup>
             {topics.map((topic) => (
@@ -84,8 +107,8 @@ function CourseDetail() {
                 action
                 onClick={() => handleTopicClick(topic)}
               >
-                <Card border="0" className="shadow-sm rounded-3 ">
-                  <Card.Body >
+                <Card border="0" className="shadow-sm rounded-3">
+                  <Card.Body>
                     <Card.Title>{topic.title}</Card.Title>
                     <div style={{ position: "relative", width: "100%", height: "200px" }}>
                       <img
@@ -123,10 +146,10 @@ function CourseDetail() {
         <Button href={`/studentquiz/${id}`} variant="success">
           Take Quiz
         </Button>
-        <Button href={`/progress/${id}`} variant="primary">
-          Track Progress
-        </Button>
+        
       </div>
+      {/* Circular Progress Bar */}
+     
     </Container>
   );
 }

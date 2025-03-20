@@ -174,7 +174,7 @@ const Topic = () => {
                 >
                   <i className="bi bi-pencil"></i>
                 </button>
-                <button className="btn btn-danger btn-sm rounded-circle" onClick={() => handleDelete(topic.id)}>                    <i className="bi bi-trash3"></i></button>
+                <button className="btn btn-danger btn-sm rounded-circle" onClick={() => handleDelete(topic.id)}><i className="bi bi-trash3"></i></button>
               </td>
             </tr>
           ))}

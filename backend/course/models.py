@@ -36,3 +36,18 @@ class Quiz(models.Model):
 
     def __str__(self):
         return f"Quiz for {self.topic.title} - Course: {self.course.title if self.course else 'No Course'}"
+
+
+class Progress(models.Model):
+    
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    completed_topics = models.ManyToManyField('Topic', blank=True)
+    progress_percentage = models.FloatField(default=0.0)  # Store completion percentage
+
+    def update_progress(self):
+        total_topics = self.course.topic_set.count()
+        if total_topics > 0:
+            self.progress_percentage = (self.completed_topics.count() / total_topics) * 100
+        else:
+            self.progress_percentage = 0.0
+        self.save()

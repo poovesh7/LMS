@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register(r'courses', CourseViewSet, basename='course')
 router.register(r'topics', TopicViewSet,basename='topic')
 router.register(r'quizzes', QuizViewSet, basename='quiz')
+router.register(r'progress', ProgressViewSet, basename='progress')
 
 urlpatterns = [
     path('', include(router.urls)),  # Removed 'api/' to avoid duplication

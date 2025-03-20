@@ -12,6 +12,7 @@ import Courses from "./student/Courses";
 import CourseDetail from "./student/CourseDetail";
 import StudentQuiz from "./student/StudentQuiz";
 import About from "./student/About";
+import Progress from "./student/Track";
 
 import InstructorDashboard from "./instructor/InstructorDashboard";
 import Course from "./instructor/Course";
@@ -46,6 +47,8 @@ const AppContent = ({ user, setUser }) => {
                     <Route path="/about" element={<About/>} />
                     <Route path="/account" element={<Signup/>} />
                     <Route path="/update-user/:id" element={<UpdateUser />} />
+                    <Route path="/progress" element={<Progress/>} />
+                    <Route path="/progress/:id" element={<Progress/>} />
                 </Routes>
             </div>
         </>

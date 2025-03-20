@@ -36,8 +36,7 @@ const Register = () => {
                     <div className="mb-3">
                         <select className="form-select" name="role" onChange={handleChange}>
                             <option value="student">Student</option>
-                            <option value="instructor">Instructor</option>
-                            <option value="admin">Admin</option>
+                           
                           
                         </select>
                     </div>
